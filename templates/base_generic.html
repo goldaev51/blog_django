@@ -31,7 +31,9 @@
                         <li><a href="">My Profile</a></li>
                         <li><a href="{% url 'logout' %}?next={{ request.path }}">Logout</a></li>
                     {% else %}
+                        <hr>
                         <li><a href="{% url 'login' %}?next={{ request.path }}">Login</a></li>
+                        <li><a href="{% url 'authentication:registration' %}?next={{ request.path }}">Registrate</a></li>
                     {% endif %}
                 </ul>
             {% endblock %}
