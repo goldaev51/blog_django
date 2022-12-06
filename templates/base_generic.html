@@ -29,7 +29,7 @@
                         <li><a href="{% url 'blog:post-create' %}">Create Post</a></li>
                         <hr>
                         <li><a href="">My Profile</a></li>
-                        <li><a href="{% url 'logout' %}?next={{ request.path }}">Logout</a></li>
+                        <li><a href="{% url 'logout' %}?next={% url 'blog:posts-list' %}">Logout</a></li>
                     {% else %}
                         <hr>
                         <li><a href="{% url 'login' %}?next={{ request.path }}">Login</a></li>
