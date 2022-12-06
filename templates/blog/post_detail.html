@@ -1,0 +1,36 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Title: {{ post.title }}</h1>
+    {% if request.user == post.author %}
+        <ul>
+            <li><a href="{% url 'blog:post-update' post.id %}">Update</a></li>
+            <li><a href="{% url 'blog:post-delete' post.id %}">Delete</a></li>
+        </ul>
+    {% endif %}
+    <p><strong>Description:</strong> {{ post.description }} </p>
+    <p><strong>Author:</strong> {{ post.author }} </p>
+    <p><strong>DELETE WHEN FINISH - Is active:</strong> {{ post.is_active }} </p>
+    {% if post.image_field %}
+        <img src="{{ post.image_field.url }}">
+    {% endif %}
+    <div style="margin-left:20px;margin-top:20px">
+        <h4>Comments</h4>
+
+        <ul>
+            {% for comment in post.comment %}
+
+                <li>
+                    <p class="text-muted">{{ comment.username }}</p>
+                    <p class="text-muted"> {{ comment.text }}</p>
+                </li>
+
+                {% if not forloop.last %}
+                    <hr>
+                {% endif %}
+            {% empty %}
+                <li>This post has no comments</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
