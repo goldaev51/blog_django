@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from django.urls import reverse_lazy
 
 from .models import Post, Comment
@@ -21,10 +22,7 @@ class PostDetailView(generic.DetailView):
     queryset = Post.objects.prefetch_related('comment_set')
 
     def get_queryset(self):
-        if self.model.objects.filter(author=self.request.user) is None:
-            return self.model.objects.all()
-        else:
-            return self.model.objects.filter(is_active=True)
+        return self.model.objects.filter(Q(is_active=True) | Q(author_id=self.request.user.id))
 
 
 # class PostCreate(LoginRequiredMixin, generic.CreateView):
