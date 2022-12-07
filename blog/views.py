@@ -1,10 +1,12 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.db.models import Q
 from django.urls import reverse_lazy
 
 from .models import Post, Comment
-from .forms import PostForm
+from .forms import PostForm, UpdateUserForm
 
 from django.conf import settings
 from django.shortcuts import render, redirect
@@ -23,11 +25,6 @@ class PostDetailView(generic.DetailView):
 
     def get_queryset(self):
         return self.model.objects.filter(Q(is_active=True) | Q(author_id=self.request.user.id))
-
-
-# class PostCreate(LoginRequiredMixin, generic.CreateView):
-#     model = Post
-#     fields = ['title', 'short_description', 'description', 'image_field', 'is_active']
 
 
 class PostUpdate(LoginRequiredMixin, generic.UpdateView):
@@ -66,4 +63,32 @@ def user_posts(request):
     return render(request, 'blog/user_posts_list.html', {'posts': posts})
 
 
+class UserPublicProfile(generic.DetailView):
+    model = User
+    # queryset = User.objects.prefetch_related('post_set', 'comment_set').all()
+    template_name = 'user_profile/public_profile.html'
 
+class UserProfile(LoginRequiredMixin, generic.DetailView):
+    model = User
+    template_name = 'user_profile/user_profile.html'
+
+    def get_queryset(self):
+        return self.model.objects.filter(pk=self.request.user.id)
+
+@login_required()
+def show_user_profile(request):
+    user = User.objects.get(pk=request.user.id)
+    return render(request, 'user_profile/user_profile.html', {'user': user})
+
+
+@login_required()
+def update_user_profile(request):
+    if request.method == 'POST':
+        form = UpdateUserForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your profile is updated successfully')
+            return redirect('blog:user-profile')
+    else:
+        form = UpdateUserForm(instance=request.user)
+    return render(request, 'user_profile/update_user_profile.html', {'form': form})

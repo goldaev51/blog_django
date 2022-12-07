@@ -22,13 +22,13 @@
             {% block sidebar %}
                 <ul class="sidebar-nav">
                     <li><a href="{% url 'blog:posts-list' %}">Posts</a></li>
-                    {% if user.is_authenticated %}
+                    {% if request.user.is_authenticated %}
                         <hr>
-                        <li>User: {{ user.get_username }}</li>
+                        <li>User: {{ request.user.get_username }}</li>
                         <li><a href="{% url 'blog:user-posts' %}">My Posts</a></li>
                         <li><a href="{% url 'blog:post-create' %}">Create Post</a></li>
                         <hr>
-                        <li><a href="">My Profile</a></li>
+                        <li><a href="{% url 'blog:user-profile' %}">My Profile</a></li>
                         <li><a href="{% url 'logout' %}?next={% url 'blog:posts-list' %}">Logout</a></li>
                     {% else %}
                         <hr>

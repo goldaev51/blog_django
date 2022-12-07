@@ -3,14 +3,12 @@
 {% block content %}
     <h1>Title: {{ post.title }}</h1>
     {% if request.user == post.author %}
-        <ul>
-            <li><a href="{% url 'blog:post-update' post.id %}">Update</a></li>
-            <li><a href="{% url 'blog:post-delete' post.id %}">Delete</a></li>
-        </ul>
+
+        <a href="{% url 'blog:post-update' post.id %}" class="btn btn-primary">Update</a>
+        <a href="{% url 'blog:post-delete' post.id %}" class="btn btn-danger">Delete</a>
     {% endif %}
     <p><strong>Description:</strong> {{ post.description }} </p>
-    <p><strong>Author:</strong> {{ post.author }} </p>
-    <p><strong>DELETE WHEN FINISH - Is active:</strong> {{ post.is_active }} </p>
+    <p><strong>Author:</strong> <a href="{% url 'blog:user-data' post.author_id %}">{{ post.author }}</a> </p>
     {% if post.image_field %}
         <img src="{{ post.image_field.url }}">
     {% endif %}
