@@ -1,0 +1,15 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>My Profile</h1>
+    <p><strong>First name:</strong> {% if user.first_name %}{{ user.first_name }}{% else %} not exists {% endif %} </p>
+    <p><strong>Last name:</strong> {% if user.last_name %}{{ user.last_name }}{% else %} not exists {% endif %} </p>
+    <p><strong>Email:</strong> {% if user.email %}{{ user.email }}{% else %} not exists {% endif %} </p>
+    <p><strong>Posts:</strong> {{ user.post_set.count }} </p>
+    <p><strong>Comments:</strong> {{ user.comment_set.count }} </p>
+
+    <a href="{% url 'blog:update-profile' %}" class="btn btn-primary">Update Profile</a>
+
+
+
+{% endblock %}

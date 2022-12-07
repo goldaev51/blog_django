@@ -18,7 +18,7 @@
                 <tr>
                     <td><a href={% url 'blog:post-detail' post.pk %}>{{ post.title }}</a></td>
                     <td>{{ post.short_description }}</td>
-                    <td>{{ post.author }}</td>
+                    <td><a href="{% url 'blog:user-data' post.author_id %}">{{ post.author }}</a></td>
                 </tr>
                 </tbody>
             {% endfor %}
