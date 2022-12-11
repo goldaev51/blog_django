@@ -38,11 +38,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+
     'widget_tweaks',
     'blog.apps.BlogConfig',
     'user_profile.apps.UserProfileConfig',
     'authentication.apps.AuthenticationConfig',
 ]
+
+if DEBUG:
+    INSTALLED_APPS += ['django_celery_results',]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -136,4 +140,15 @@ LOGIN_REDIRECT_URL = '/'
 
 MEDIA_ROOT = BASE_DIR / 'media/'
 MEDIA_URL = '/media/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+if DEBUG:
+    # Celery Configuration Options
+    CELERY_TIMEZONE = TIME_ZONE
+    CELERY_TASK_TRACK_STARTED = True
+    CELERY_TASK_TIME_LIMIT = 30 * 60
+    CELERY_RESULT_BACKEND = 'django-db'
+    CELERY_CACHE_BACKEND = 'django-cache'
+    CELERY_BROKER_URL = 'amqp://localhost'
 

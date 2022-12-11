@@ -1,18 +1,18 @@
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q, Prefetch
-from django.http import JsonResponse, Http404
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.utils import timezone
 from django.views import generic
 
 from .forms import PostForm, CommentForm
 from .models import Post, Comment
+from .tasks import send_email_comment as celery_send_email_new_comment
 
 
 class PostsListView(generic.ListView):
@@ -70,6 +70,11 @@ def create_new_post(request):
             post.author = request.user
             post.pubdate = timezone.now()
             post.save()
+
+            if settings.DEBUG:
+                admin_email_body = f'New post created, please verify it {post.get_admin_post_url()}'
+                celery_send_email_new_comment.delay('New post created', admin_email_body, 'admin@admin.com')
+
             return redirect('blog:post-detail', pk=post.id)
     else:
         form = PostForm
@@ -92,10 +97,18 @@ def save_comment_form(request, form, template_name, post_pk):
             comment.post = post
             comment.save()
             data['form_is_valid'] = True
-            comments = Comment.objects.filter(post=post)
+            comments = Comment.objects.filter(post=post).filter(is_published=True)
             data['html_comment_list'] = render_to_string('blog/includes/partial_comment_list.html', {
                 'comments': comments
             })
+
+            if settings.DEBUG:
+                admin_email_body = f'New comment created, please verify it {comment.get_admin_comment_url()}'
+                celery_send_email_new_comment.delay('New comment created', admin_email_body, 'admin@admin.com')
+
+                post_owner_email_body = f'You received new comment for your post. Check it {post.get_post_url()}'
+                celery_send_email_new_comment.delay('New comment created', post_owner_email_body, post.author.email)
+
         else:
             data['form_is_valid'] = False
     context = {'form': form, 'post_pk': post_pk}

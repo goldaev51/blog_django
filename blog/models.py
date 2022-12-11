@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
@@ -19,6 +20,16 @@ class Post(models.Model):
         """
         return reverse('blog:post-detail', args=[str(self.id)])
 
+
+    def get_admin_post_url(self):
+        content_type = ContentType.objects.get_for_model(self.__class__)
+        return reverse(f"admin:{content_type.app_label}_{content_type.model}_change", args=(self.id,))
+
+
+    def get_post_url(self):
+        return reverse(f"blog:post-detail", args=(self.id,))
+
+
     class Meta:
         ordering = ('-pubdate',)
 
@@ -34,6 +45,11 @@ class Comment(models.Model):
     def publish_comment(self):
         self.is_published = True
         self.save()
+
+    def get_admin_comment_url(self):
+        content_type = ContentType.objects.get_for_model(self.__class__)
+        return reverse(f"admin:{content_type.app_label}_{content_type.model}_change", args=(self.id,))
+
 
     class Meta:
         ordering = ('-pubdate',)
