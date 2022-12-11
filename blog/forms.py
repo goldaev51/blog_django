@@ -13,3 +13,8 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['username', 'text']
+
+
+class FeedbackForm(forms.Form):
+    email = forms.EmailField(label='Email')
+    text = forms.CharField(label='Text', max_length=400)

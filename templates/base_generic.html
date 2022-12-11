@@ -29,6 +29,7 @@
     {% endblock %}
     {% block extra_js %}
     {% endblock %}
+    <script src="{% static 'js/comments.js' %}"></script>
 </head>
 
 <body>
@@ -63,6 +64,14 @@
             {% endif %}
 
         {% endblock %}
+
+        <div class="modal fade" id="modal-form">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>

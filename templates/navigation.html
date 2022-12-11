@@ -14,6 +14,12 @@
                        href="{{ posts_list }}">Posts</a>
                 </li>
 
+                <li class="nav-item">
+                    {% url 'blog:feedback' as feedback %}
+                    <a data-url="{{ feedback }}" class="nav-link js-create-feedback {% if request.path == feedback %} active{% endif %}" aria-current="page"
+                       href="#">Feedback</a>
+                </li>
+
                 {% if request.user.is_authenticated %}
 
                     <li class="nav-item">
@@ -34,7 +40,8 @@
                             {{ request.user.get_username }}
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="{% url 'user_profile:user-profile' %}">My Profile</a></li>
+                            <li><a class="dropdown-item" href="{% url 'user_profile:user-profile' %}">My Profile</a>
+                            </li>
                             <li><a class="dropdown-item" href="{% url 'logout' %}?next={% url 'blog:posts-list' %}">Logout</a>
                             </li>
                         </ul>

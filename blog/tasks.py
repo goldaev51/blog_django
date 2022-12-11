@@ -13,3 +13,14 @@ def send_email_comment(email_subject, email_body, email_to):
         [email_to],
         fail_silently=False,
     )
+
+
+@shared_task
+def send_feedback_email(email_body, email_from):
+    send_mail(
+        'New feedback received',
+        email_body,
+        email_from,
+        ['admin@admin.com'],
+        fail_silently=False,
+    )
