@@ -10,9 +10,9 @@ from django.urls import reverse_lazy, reverse
 from django.utils import timezone
 from django.views import generic
 
-from .forms import PostForm, CommentForm
+from .forms import PostForm, CommentForm, FeedbackForm
 from .models import Post, Comment
-from .tasks import send_email_comment as celery_send_email_new_comment
+from .tasks import send_email_comment as celery_send_email_new_comment, send_feedback_email as celery_send_feedback
 
 
 class PostsListView(generic.ListView):
@@ -70,7 +70,6 @@ def create_new_post(request):
             post.author = request.user
             post.pubdate = timezone.now()
             post.save()
-
             if settings.DEBUG:
                 admin_email_body = f'New post created, please verify it {post.get_admin_post_url()}'
                 celery_send_email_new_comment.delay('New post created', admin_email_body, 'admin@admin.com')
@@ -125,3 +124,26 @@ def comment_create(request, pk):
         else:
             form = CommentForm(initial={'username': request.user.username})
     return save_comment_form(request, form, 'blog/includes/partial_comment_create.html', pk)
+
+
+def feedback(request):
+    data = dict()
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            data['form_is_valid'] = True
+            if settings.DEBUG:
+                celery_send_feedback.delay(form.cleaned_data['text'], form.cleaned_data['email'])
+        else:
+            data['form_is_valid'] = False
+    else:
+        if request.user.is_anonymous:
+            form = FeedbackForm()
+        else:
+            form = FeedbackForm(initial={'email': request.user.email})
+
+    context = {'form': form}
+    data['html_form'] = render_to_string('blog/includes/partial_feedback_create.html', context, request=request)
+    # print(data['html_form'])
+    print('Feedback view done!')
+    return JsonResponse(data)

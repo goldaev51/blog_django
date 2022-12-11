@@ -12,4 +12,6 @@ urlpatterns = [
     path('delete-post/<int:pk>', views.PostDelete.as_view(), name='post-delete'),
     path('create-post/', views.create_new_post, name='post-create'),
     path('my-posts/', views.user_posts, name='user-posts'),
+
+    path('feedback/', views.feedback, name='feedback'),
 ]
