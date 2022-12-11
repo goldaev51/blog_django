@@ -1,33 +1,18 @@
 {% extends "base_generic.html" %}
-
+{% block title %}<title>Posts</title>{% endblock %}
 {% block content %}
-    <h1>Posts</h1>
 
-    {% if post_list %}
-
-        <table class="table table-bordered">
-            <thead>
-            <tr>
-                <th>Title</th>
-                <th>Short Description</th>
-                <th>Author</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for post in post_list %}
-                <tr>
-                    <td><a href={% url 'blog:post-detail' post.pk %}>{{ post.title }}</a></td>
-                    <td>{{ post.short_description }}</td>
-                    <td><a href="{% url 'blog:user-data' post.author_id %}">{{ post.author }}</a></td>
-                </tr>
-                </tbody>
-            {% endfor %}
-        </table>
-
-
-
-    {% else %}
-        <p>There are no posts in db.</p>
-    {% endif %}
+    <table class="table" id="posts-table">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Short Description</th>
+            <th>Author</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% include 'blog/includes/partial_posts_list.html' %}
+        </tbody>
+    </table>
 
 {% endblock %}

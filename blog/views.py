@@ -1,16 +1,18 @@
-from django.contrib import messages
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
-from django.db.models import Q
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Q, Prefetch
+from django.http import JsonResponse, Http404
+from django.shortcuts import render, redirect, get_object_or_404
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy
-
-from .models import Post, Comment
-from .forms import PostForm, UpdateUserForm
-
-from django.conf import settings
-from django.shortcuts import render, redirect
+from django.utils import timezone
 from django.views import generic
+
+from .forms import PostForm, CommentForm
+from .models import Post, Comment
 
 
 class PostsListView(generic.ListView):
@@ -21,10 +23,26 @@ class PostsListView(generic.ListView):
 
 class PostDetailView(generic.DetailView):
     model = Post
-    queryset = Post.objects.prefetch_related('comment_set')
 
     def get_queryset(self):
-        return self.model.objects.filter(Q(is_active=True) | Q(author_id=self.request.user.id))
+        return self.model.objects.filter(Q(is_active=True) | Q(author_id=self.request.user.id)) \
+            .prefetch_related(Prefetch('comments', queryset=Comment.objects.filter(is_published=True)))
+
+
+def post_details(request, pk):
+    post = get_object_or_404(Post.objects.filter(Q(is_active=True) | Q(author_id=request.user.id)), pk=pk)
+    post_comments = post.comments.filter(is_published=True)
+
+    page = request.GET.get('page', 1)
+    paginator = Paginator(post_comments, 2)
+    try:
+        post_comments_paginated = paginator.page(page)
+    except PageNotAnInteger:
+        post_comments_paginated = paginator.page(1)
+    except EmptyPage:
+        post_comments_paginated = paginator.page(paginator.num_pages)
+
+    return render(request, 'blog/post_details.html', {'post': post ,'page_obj': post_comments_paginated})
 
 
 class PostUpdate(LoginRequiredMixin, generic.UpdateView):
@@ -50,6 +68,7 @@ def create_new_post(request):
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
+            post.pubdate = timezone.now()
             post.save()
             return redirect('blog:post-detail', pk=post.id)
     else:
@@ -59,36 +78,37 @@ def create_new_post(request):
 
 @login_required
 def user_posts(request):
-    posts = Post.objects.filter(author_id=request.user.id)
+    posts = Post.objects.filter(author=request.user)
     return render(request, 'blog/user_posts_list.html', {'posts': posts})
 
 
-class UserPublicProfile(generic.DetailView):
-    model = User
-    # queryset = User.objects.prefetch_related('post_set', 'comment_set').all()
-    template_name = 'user_profile/public_profile.html'
+def save_comment_form(request, form, template_name, post_pk):
+    data = dict()
+    post = get_object_or_404(Post, pk=post_pk)
 
-class UserProfile(LoginRequiredMixin, generic.DetailView):
-    model = User
-    template_name = 'user_profile/user_profile.html'
-
-    def get_queryset(self):
-        return self.model.objects.filter(pk=self.request.user.id)
-
-@login_required()
-def show_user_profile(request):
-    user = User.objects.get(pk=request.user.id)
-    return render(request, 'user_profile/user_profile.html', {'user': user})
-
-
-@login_required()
-def update_user_profile(request):
     if request.method == 'POST':
-        form = UpdateUserForm(request.POST, instance=request.user)
         if form.is_valid():
-            form.save()
-            messages.success(request, 'Your profile is updated successfully')
-            return redirect('blog:user-profile')
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.save()
+            data['form_is_valid'] = True
+            comments = Comment.objects.filter(post=post)
+            data['html_comment_list'] = render_to_string('blog/includes/partial_comment_list.html', {
+                'comments': comments
+            })
+        else:
+            data['form_is_valid'] = False
+    context = {'form': form, 'post_pk': post_pk}
+    data['html_form'] = render_to_string(template_name, context, request=request)
+    return JsonResponse(data)
+
+
+def comment_create(request, pk):
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
     else:
-        form = UpdateUserForm(instance=request.user)
-    return render(request, 'user_profile/update_user_profile.html', {'form': form})
+        if request.user.is_anonymous:
+            form = CommentForm(initial={'username': 'anonim'})
+        else:
+            form = CommentForm(initial={'username': request.user.username})
+    return save_comment_form(request, form, 'blog/includes/partial_comment_create.html', pk)

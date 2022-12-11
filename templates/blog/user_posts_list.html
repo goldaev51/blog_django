@@ -4,7 +4,7 @@
     <h1>My Posts</h1>
 
     {% if posts %}
-        <table class="table table-bordered">
+        <table class="table">
             <thead>
             <tr>
                 <th>Title</th>
@@ -15,12 +15,12 @@
             <tbody>
             {% for post in posts %}
                 <tr>
-                    <td><a href={% url 'blog:post-detail' post.pk %}>{{ post.title }}</a></td>
+                    <td><a href="{% url 'blog:post-detail' post.pk %}">{{ post.title }}</a></td>
                     <td>{{ post.short_description }}</td>
                     <td>{{ post.is_active }}</td>
                 </tr>
-                </tbody>
             {% endfor %}
+            </tbody>
         </table>
     {% else %}
         <p>You have no posts, would you like to <a href="{% url 'blog:post-create' %}">write the first one?</a></p>

@@ -1,7 +1,7 @@
 {% extends 'base_generic.html' %}
 {% block content %}
 
-<form action="{% url 'blog:update-profile' %}" method="post">
+<form action="{% url 'user_profile:update-profile' %}" method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" class="btn btn-success" value="Submit"/>

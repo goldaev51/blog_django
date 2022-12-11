@@ -1,0 +1,11 @@
+{% for post in post_list %}
+    <tr>
+        <td><a href="{% url 'blog:post-detail' post.pk %}">{{ post.title }}</a></td>
+        <td>{{ post.short_description }}</td>
+        <td><a href="{% url 'user_profile:user-data' post.author_id %}">{{ post.author }}</a></td>
+    </tr>
+{% empty %}
+    <tr>
+        <td colspan="8" class="text-center bg-warning">No posts</td>
+    </tr>
+{% endfor %}
