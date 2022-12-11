@@ -1,0 +1,59 @@
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'blog:posts-list' %}">Blog</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#user-posts"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    {% url 'blog:posts-list' as posts_list %}
+                    <a class="nav-link {% if request.path == posts_list %} active{% endif %}" aria-current="page"
+                       href="{{ posts_list }}">Posts</a>
+                </li>
+
+                {% if request.user.is_authenticated %}
+
+                    <li class="nav-item">
+                        {% url 'blog:user-posts' as user_posts %}
+                        <a class="nav-link {% if request.path == user_posts %} active{% endif %}"
+                           href="{{ user_posts }}">User Posts</a>
+                    </li>
+
+                    <li class="nav-item">
+                        {% url 'blog:post-create' as post_create %}
+                        <a class="nav-link {% if request.path == post_create %} active{% endif %}"
+                           href="{{ post_create }}">Create Post</a>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            {{ request.user.get_username }}
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{% url 'user_profile:user-profile' %}">My Profile</a></li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}?next={% url 'blog:posts-list' %}">Logout</a>
+                            </li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        {% url 'login' as login %}
+                        <a class="nav-link {% if request.path == login %} active{% endif %}"
+                           href="{{ login }}">Login</a>
+                    </li>
+
+                    <li class="nav-item">
+                        {% url 'authentication:registration' as registrate %}
+                        <a class="nav-link {% if request.path == registrate %} active{% endif %}"
+                           href="{{ registrate }}">Registrate</a>
+                    </li>
+
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

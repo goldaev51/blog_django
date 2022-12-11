@@ -31,7 +31,7 @@
         </p>
 
         <ul id="comment-table">
-            {% with comments=post.comments.all %}
+            {% with comments=page_obj %}
                 <div>
                     {% include 'blog/includes/partial_comment_list.html' %}
                 </div>

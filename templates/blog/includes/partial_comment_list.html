@@ -1,0 +1,13 @@
+{% for comment in comments %}
+
+    <li>
+        <p class="text-muted">{{ comment.username }}</p>
+        <p class="text-muted"> {{ comment.text }}</p>
+    </li>
+
+    {% if not forloop.last %}
+        <hr>
+    {% endif %}
+{% empty %}
+    <li>This post has no comments</li>
+{% endfor %}
