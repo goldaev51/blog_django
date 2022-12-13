@@ -11,8 +11,8 @@ Add a script that will load the form in the modal window, submit the form from t
 
 ## Realised
 
-1. [Created logic of leave comment with jQuery and modal-form](https://github.com/goldaev51/blog_django/blob/main/blog/views.py#L129)
-2. [Created logic of feedback with jQuery and modal-form](https://github.com/goldaev51/blog_django/blob/main/blog/views.py#L118)
+1. [Created logic of leave comment with jQuery and modal-form](https://github.com/goldaev51/blog_django/blob/main/blog/views.py#L118)
+2. [Created logic of feedback with jQuery and modal-form](https://github.com/goldaev51/blog_django/blob/main/blog/views.py#L129)
 3. [jQuery code](static/js/comments.js)
 
 
