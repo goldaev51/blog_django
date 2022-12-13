@@ -144,6 +144,4 @@ def feedback(request):
 
     context = {'form': form}
     data['html_form'] = render_to_string('blog/includes/partial_feedback_create.html', context, request=request)
-    # print(data['html_form'])
-    print('Feedback view done!')
     return JsonResponse(data)

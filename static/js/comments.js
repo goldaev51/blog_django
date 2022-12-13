@@ -4,8 +4,6 @@ $(function () {
 
     let loadForm = function () {
         let btn = $(this);
-        console.log(btn)
-        console.log(btn.attr("data-url"))
         $.ajax({
             url: btn.attr("data-url"),
             type: 'get',
@@ -41,9 +39,6 @@ $(function () {
 
     let loadFeedbackForm = function () {
         let a = $(this);
-        // a.preventDefault();
-        console.log(a)
-        console.log(a.attr("data-url"))
         $.ajax({
             url: a.attr("data-url"),
             type: 'get',
@@ -83,17 +78,9 @@ $(function () {
     $(".js-create-comment").click(loadForm);
     $("#modal-form").on("submit", ".js-comment-create-form", saveForm);
 
-    $("a.js-create-feedback").click(loadFeedbackForm).preventDefault();
+    $("a.js-create-feedback").click(loadFeedbackForm);
     $("#modal-form").on("submit", ".js-feedback-create-form", saveFeedbackForm);
 
     $(".js-load-comments").click(loadForm);
-
-    // Update book
-    // $("#book-table").on("click", ".js-update-book", loadForm);
-    // $("#modal-form").on("submit", ".js-book-update-form", saveForm);
-    //
-    // // Delete book
-    // $("#book-table").on("click", ".js-delete-book", loadForm);
-    // $("#modal-form").on("submit", ".js-book-delete-form", saveForm);
 
 });
