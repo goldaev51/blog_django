@@ -24,7 +24,7 @@ SECRET_KEY = os.getenv('DJANGO-SECRET-KEY', 'django-insecure-lkv%@bc^li2nr%&=04n
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get('DJANGO_DEBUG', True))
 
-ALLOWED_HOSTS = ['murmuring-anchorage-57220.herokuapp.com','127.0.0.1']
+ALLOWED_HOSTS = []
 
 # Application definition
 
@@ -137,6 +137,13 @@ MEDIA_URL = '/media/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': 'redis://127.0.0.1:6379',
+        }
+    }
+
 if DEBUG:
     # Celery Configuration Options
     CELERY_TIMEZONE = TIME_ZONE
@@ -145,6 +152,8 @@ if DEBUG:
     CELERY_RESULT_BACKEND = 'django-db'
     CELERY_CACHE_BACKEND = 'django-cache'
     CELERY_BROKER_URL = 'amqp://localhost'
+
+
 
 # Heroku: Update database configuration from $DATABASE_URL.
 import dj_database_url

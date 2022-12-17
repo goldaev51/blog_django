@@ -8,13 +8,18 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils import timezone
+from django.utils.decorators import method_decorator
 from django.views import generic
 
 from .forms import PostForm, CommentForm, FeedbackForm
 from .models import Post, Comment
 from .tasks import send_email as celery_send_email_new_comment, send_feedback_email as celery_send_feedback
+from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_cookie
 
+decorators = [cache_page(20), vary_on_cookie]
 
+@method_decorator(decorators, 'dispatch')
 class PostsListView(generic.ListView):
     model = Post
     paginate_by = settings.PAGINATION_DATA_PER_PAGE

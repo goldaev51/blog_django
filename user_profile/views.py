@@ -2,11 +2,15 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
+from django.utils.decorators import method_decorator
 from django.views import generic
-
+from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_cookie
 from .forms import UpdateUserForm
 
+decorators = [cache_page(20), vary_on_cookie]
 
+@method_decorator(decorators, 'dispatch')
 class UserPublicProfile(generic.DetailView):
     model = User
     template_name = 'user_profile/public_profile.html'
