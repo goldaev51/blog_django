@@ -27,7 +27,7 @@ class Post(models.Model):
 
 
     def get_post_url(self):
-        return reverse(f"blog:post-detail", args=(self.id,))
+        return reverse("blog:post-detail", args=(self.id,))
 
 
     class Meta:
@@ -35,7 +35,6 @@ class Post(models.Model):
 
 
 class Comment(models.Model):
-    # username = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='comments', null=True)
     username = models.CharField(max_length=100)
     text = models.TextField()
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')

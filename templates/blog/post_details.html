@@ -2,10 +2,6 @@
 
 {% load static %}
 
-{% block extra_js %}
-    <script src="{% static 'js/comments.js' %}"></script>
-{% endblock %}
-
 {% block content %}
     <h1>Title: {{ post.title }}</h1>
     {% if request.user == post.author %}
@@ -37,9 +33,15 @@
                 </div>
             {% endwith %}
         </ul>
-
-
     </div>
+
+    <div class="modal fade" id="modal-form-comment">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                </div>
+            </div>
+        </div>
 
 
 {% endblock %}

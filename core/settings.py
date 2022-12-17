@@ -25,7 +25,7 @@ SECRET_KEY = os.getenv('DJANGO-SECRET-KEY', 'django-insecure-lkv%@bc^li2nr%&=04n
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -152,3 +152,4 @@ if DEBUG:
     CELERY_CACHE_BACKEND = 'django-cache'
     CELERY_BROKER_URL = 'amqp://localhost'
 
+SITE_URL = 'http://127.0.0.1:8000'
