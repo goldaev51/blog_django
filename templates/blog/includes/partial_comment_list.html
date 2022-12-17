@@ -1,13 +1,11 @@
 {% for comment in comments %}
 
-    <li>
+    <li class="infinite-item">
         <p class="text-muted">{{ comment.username }}</p>
         <p class="text-muted"> {{ comment.text }}</p>
+        <hr>
     </li>
 
-    {% if not forloop.last %}
-        <hr>
-    {% endif %}
 {% empty %}
-    <li>This post has no comments</li>
+    <li class="infinite-item">This post has no comments</li>
 {% endfor %}

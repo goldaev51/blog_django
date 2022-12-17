@@ -34,7 +34,7 @@ def post_details(request, pk):
     post_comments = post.comments.filter(is_published=True)
 
     page = request.GET.get('page', 1)
-    paginator = Paginator(post_comments, 2)
+    paginator = Paginator(post_comments, 5)
     try:
         post_comments_paginated = paginator.page(page)
     except PageNotAnInteger:
