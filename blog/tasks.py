@@ -5,7 +5,7 @@ from django.core.mail import send_mail
 
 
 @shared_task
-def send_email_comment(email_subject, email_body, email_to):
+def send_email(email_subject, email_body, email_to):
     send_mail(
         email_subject,
         email_body,

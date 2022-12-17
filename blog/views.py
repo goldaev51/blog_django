@@ -12,7 +12,7 @@ from django.views import generic
 
 from .forms import PostForm, CommentForm, FeedbackForm
 from .models import Post, Comment
-from .tasks import send_email_comment as celery_send_email_new_comment, send_feedback_email as celery_send_feedback
+from .tasks import send_email as celery_send_email_new_comment, send_feedback_email as celery_send_feedback
 
 
 class PostsListView(generic.ListView):
@@ -104,9 +104,6 @@ def save_comment_form(request, form, template_name, post_pk):
             if settings.DEBUG:
                 admin_email_body = f'New comment created, please verify it {comment.get_admin_comment_url()}'
                 celery_send_email_new_comment.delay('New comment created', admin_email_body, 'admin@admin.com')
-
-                post_owner_email_body = f'You received new comment for your post. Check it {post.get_post_url()}'
-                celery_send_email_new_comment.delay('New comment created', post_owner_email_body, post.author.email)
 
         else:
             data['form_is_valid'] = False

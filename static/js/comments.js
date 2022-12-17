@@ -9,11 +9,11 @@ $(function () {
             type: 'get',
             dataType: 'json',
             beforeSend: function () {
-                $("#modal-form .modal-content").html("");
-                $("#modal-form").modal("show");
+                $("#modal-form-comment .modal-content").html("");
+                $("#modal-form-comment").modal("show");
             },
             success: function (data) {
-                $("#modal-form .modal-content").html(data.html_form);
+                $("#modal-form-comment .modal-content").html(data.html_form);
             }
         });
     };
@@ -27,10 +27,10 @@ $(function () {
             dataType: 'json',
             success: function (data) {
                 if (data.form_is_valid) {
-                    $("#comment-table div").html(data.html_comment_list);
-                    $("#modal-form").modal("hide");
+                    // $("#comment-table div").html(data.html_comment_list);
+                    $("#modal-form-comment").modal("hide");
                 } else {
-                    $("#modal-form .modal-content").html(data.html_form);
+                    $("#modal-form-comment .modal-content").html(data.html_form);
                 }
             }
         });
@@ -76,11 +76,9 @@ $(function () {
 
     // Create comment
     $(".js-create-comment").click(loadForm);
-    $("#modal-form").on("submit", ".js-comment-create-form", saveForm);
+    $("#modal-form-comment").on("submit", ".js-comment-create-form", saveForm);
 
     $("a.js-create-feedback").click(loadFeedbackForm);
     $("#modal-form").on("submit", ".js-feedback-create-form", saveFeedbackForm);
-
-    $(".js-load-comments").click(loadForm);
 
 });
