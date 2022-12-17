@@ -5,7 +5,6 @@
 {% block content %}
     <h1>Title: {{ post.title }}</h1>
     {% if request.user == post.author %}
-
         <a href="{% url 'blog:post-update' post.id %}" class="btn btn-primary">Update</a>
         <a href="{% url 'blog:post-delete' post.id %}" class="btn btn-danger">Delete</a>
     {% endif %}
