@@ -30,8 +30,11 @@
             </tr>
         </table>
 
-        <input type="submit" value="login"/>
+
+        <input type="submit" class="btn btn-success" value="login"/>
+        <a class="btn btn-primary" href="{% url 'password_reset' %}">Lost password?</a>
         <input type="hidden" name="next" value="{{ next }}"/>
     </form>
+
 
 {% endblock %}

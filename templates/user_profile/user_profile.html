@@ -6,7 +6,6 @@
     <p><strong>Last name:</strong> {% if user.last_name %}{{ user.last_name }}{% else %} not exists {% endif %} </p>
     <p><strong>Email:</strong> {% if user.email %}{{ user.email }}{% else %} not exists {% endif %} </p>
     <p><strong>Posts:</strong> {{ user.post_set.count }} </p>
-    <p><strong>Comments:</strong> {{ user.comment_set.count }} </p>
 
     <a href="{% url 'user_profile:update-profile' %}" class="btn btn-primary">Update Profile</a>
 
