@@ -26,22 +26,40 @@
             </button>
         </p>
 
-        <ul id="comment-table">
+        <ul id="comment-table" class="infinite-container">
             {% with comments=page_obj %}
-                <div>
                     {% include 'blog/includes/partial_comment_list.html' %}
-                </div>
             {% endwith %}
         </ul>
+        <div class="loading" style="display: none;">
+            Loading...
+        </div>
+
     </div>
 
     <div class="modal fade" id="modal-form-comment">
-            <div class="modal-dialog">
-                <div class="modal-content">
+        <div class="modal-dialog">
+            <div class="modal-content">
 
-                </div>
             </div>
         </div>
+    </div>
+{% endblock %}
 
+{% block pagination %}
+    {% if page_obj.has_next %}
+        <a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}"></a>
+    {% endif %}
 
+    <script>
+        let infinite = new Waypoint.Infinite({
+            element: $('.infinite-container')[0],
+            onBeforePageLoad: function () {
+                $('.loading').show();
+            },
+            onAfterPageLoad: function ($items) {
+                $('.loading').hide();
+            }
+        });
+    </script>
 {% endblock %}
