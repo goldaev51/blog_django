@@ -24,7 +24,7 @@ SECRET_KEY = os.getenv('DJANGO-SECRET-KEY', 'django-insecure-lkv%@bc^li2nr%&=04n
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get('DJANGO_DEBUG', True))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['murmuring-anchorage-57220.herokuapp.com','127.0.0.1']
 
 # Application definition
 
