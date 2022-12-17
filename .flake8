@@ -1,0 +1,4 @@
+[flake8]
+ignore = T201
+max-line-length = 120
+exclude = .git,__pycache__,venv,.venv,.idea,migrations,parse_data_old.py,test.py,blog/apps.py

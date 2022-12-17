@@ -4,6 +4,6 @@ from . import views
 
 app_name = 'authentication'
 urlpatterns = [
-    path('registration/', views.RegistrationFormView.as_view( ), name='registration'),
+    path('registration/', views.RegistrationFormView.as_view(), name='registration'),
 
 ]

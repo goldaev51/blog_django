@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from blog.models import Post, Comment
 
+
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
     list_display = ['username', 'text', 'post_id', 'pubdate', 'is_published']

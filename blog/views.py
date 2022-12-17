@@ -6,7 +6,7 @@ from django.db.models import Q, Prefetch
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views import generic
 
@@ -42,7 +42,7 @@ def post_details(request, pk):
     except EmptyPage:
         post_comments_paginated = paginator.page(paginator.num_pages)
 
-    return render(request, 'blog/post_details.html', {'post': post ,'page_obj': post_comments_paginated})
+    return render(request, 'blog/post_details.html', {'post': post, 'page_obj': post_comments_paginated})
 
 
 class PostUpdate(LoginRequiredMixin, generic.UpdateView):
