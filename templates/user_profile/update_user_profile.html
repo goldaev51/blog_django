@@ -4,6 +4,8 @@
 <form action="{% url 'user_profile:update-profile' %}" method="post">
     {% csrf_token %}
     {{ form.as_p }}
+
     <input type="submit" class="btn btn-success" value="Submit"/>
+    <a class="btn btn-primary" href="{% url 'user_profile:password_change' %}">Change password</a>
 </form>
 {% endblock %}

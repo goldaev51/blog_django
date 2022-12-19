@@ -3,7 +3,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.views import generic
-
+from django.urls import reverse_lazy
+from django.contrib.auth.views import PasswordChangeView
+from django.contrib.messages.views import SuccessMessageMixin
 from .forms import UpdateUserForm
 
 
@@ -29,3 +31,9 @@ def update_user_profile(request):
     else:
         form = UpdateUserForm(instance=request.user)
     return render(request, 'user_profile/update_user_profile.html', {'form': form})
+
+
+class ChangePasswordView(SuccessMessageMixin, PasswordChangeView):
+    template_name = 'user_profile/change_password.html'
+    success_message = "Successfully Changed Your Password"
+    success_url = reverse_lazy('user_profile:update-profile')
