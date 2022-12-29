@@ -1,30 +1,34 @@
-# HW 19. Bootstrap, JQuery, JSON, AJAX
+# Blog
 
 ## Task
 
-In any of the repositories, implement or change the ContactForm functionality that will send a letter to the mail (via celery) but will be available from any page of the site that uses one of the basic templates.<br/>
-Add a modal window from bootstrap to the base template (project or application or application template group) in which you will load the form or success message.<br/>
-Add or change the endpoint view so that it sends data in json format.<br/>
-Add a script that will load the form in the modal window, submit the form from the window, and load back the result - a form with checked fields with errors or a success message.<br/>
-
-(For example, the "Contact us" button in the header on every page)<br/>
+* User can register + login/logout </br>
+* User can create posts (login required) </br>
+* The user can publish posts or put them into blanks (the user can publish them later) </br>
+* The user can modify their posts (login required, filter(owner=...)) </br>
+* Anonymous users can post comments </br>
+* Comments are moderated before publication (field is_published + admin page) </br>
+* The administrator receives an email notification about a new post or comment (to the console) </br>
+* The user is notified of a new comment below the post with a link to the post (console) (start by sending an email when the comment is created) </br>
+* There is a page with a list of all posts </br>
+* There is a page with a list of user posts </br>
+* There is a post page </br>
+* There is a public profile page </br>
+* There is a profile in which you can change your data </br>
+* Pagination of posts and comments </br>
+* The post has a title, a short description, a picture (optionally a link to an image or a real image file) and a full description </br>
+* The comment has a username and text (just two text fields) </br>
+* Fixture loremipsum </br>
+* Admin panel with functionality </br>
+* Feedback form with the admin (in the console) </br>
+* Templates with styling </br>
+* Different settings for development and production </br>
+* Database query optimization </br>
+* caching </br>
+* Celery </br>
+* Pythonanywhere or Heroku or DigitalOcean or whatever - deploy in production (without caching and task background) ** </br>
 
 ## Realised
 
-1. [Created logic of leave comment with jQuery and modal-form](https://github.com/goldaev51/blog_django/blob/main/blog/views.py#L118)
-2. [Created logic of feedback with jQuery and modal-form](https://github.com/goldaev51/blog_django/blob/main/blog/views.py#L129)
-3. [jQuery code](static/js/comments.js)
+Created all logic described in task
 
-
-## Launch
-
-* clone current repository
-* pip install -r requirements.txt
-* python manage.py makemigrations
-* python manage.py migrate
-* Create superuser with 'python manage.py createsuperuser'
-* Fill db with 'python manage.py fill_db'
-* python manage.py runserver
-* In new terminal tab run  celery -A core worker -l INFO
-* Go to http://127.0.0.1:8000/blog/posts/
-* Check logic of leaving feedback and create comment for the post
